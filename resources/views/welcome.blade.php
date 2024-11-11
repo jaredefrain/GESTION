@@ -27,8 +27,8 @@
         <!-- Sección Hero -->
         <div class="hero-bg min-h-screen flex items-center justify-center py-20">
             <div class="bg-white bg-opacity-80 rounded-lg p-10 shadow-lg">
-                <h1 class="text-4xl font-bold text-blue-900">Bienvenido al Sistema de Gestión Hospitalaria</h1>
-                <p class="mt-4 text-lg text-gray-700">Gestione los registros de pacientes, citas y la información médica de manera eficiente.</p>
+                <h1 class="text-4xl font-bold text-blue-900">Bienvenido al Sistema de Gestión Deportivo</h1>
+                <p class="mt-4 text-lg text-gray-700">Gestione los registros de jugadores, partidos y la información manera eficiente.</p>
 
                 @if (Route::has('login'))
                     <div class="mt-8">
