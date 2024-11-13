@@ -20,6 +20,9 @@
                         <x-nav-link :href="route('teams.index')" :active="request()->routeIs('teams.index')">
                             {{ __('Gestionar Equipos') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('admin.player.details.index', Auth::user())" :active="request()->routeIs('admin.player.details.index')">
+                            {{ __('Detalles jugadores') }}
+                        </x-nav-link>
                     @elseif(Auth::user()->role === 'referee')
                         <x-nav-link :href="route('referee.dashboard')" :active="request()->routeIs('referee.dashboard')">
                             {{ __('Dashboard Árbitro') }}
@@ -89,6 +92,9 @@
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('teams.index')" :active="request()->routeIs('teams.index')">
                     {{ __('Gestionar Equipos') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.player.details.index', Auth::user())" :active="request()->routeIs('admin.player.details.index')">
+                    {{ __('Detalles jugadores') }}
                 </x-responsive-nav-link>
             @elseif(Auth::user()->role === 'referee')
                 <x-responsive-nav-link :href="route('referee.dashboard')" :active="request()->routeIs('referee.dashboard')">

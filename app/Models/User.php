@@ -46,4 +46,10 @@ class User extends Authenticatable
     {
         return $this->role === self::ROLE_PLAYER;
     }
+
+    public function playerDetail()
+{
+    return $this->hasOne(PlayerDetail::class);
+}
+
 }

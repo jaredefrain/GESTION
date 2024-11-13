@@ -8,15 +8,18 @@ use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\CoachController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TeamController;
+use App\Http\Controllers\PlayerDetailController;
 
 // Middleware de autenticación
 Route::middleware(['auth'])->group(function () {
 
-    // Rutas para el admin
-    Route::middleware('role:admin')->group(function () {
+    Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
         Route::get('/admin/create', [AdminController::class, 'create'])->name('admin.create');
         Route::post('/admin/store', [AdminController::class, 'store'])->name('admin.store');
+        Route::get('/admin/{user}/edit', [AdminController::class, 'edit'])->name('admin.edit');
+        Route::put('/admin/{user}', [AdminController::class, 'update'])->name('admin.update');
+        Route::delete('/admin/{user}', [AdminController::class, 'destroy'])->name('admin.destroy');
     });
 
     // Rutas para el árbitro
@@ -54,4 +57,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/admin/player/details', [PlayerDetailController::class, 'index'])->name('admin.player.details.index');
+    Route::get('/admin/player/details/create', [PlayerDetailController::class, 'create'])->name('admin.player.details.create');
+    Route::post('/admin/player/details', [PlayerDetailController::class, 'store'])->name('admin.player.details.store');
+    Route::get('/admin/player/{user}/details', [PlayerDetailController::class, 'edit'])->name('admin.player.details.edit');
+    Route::put('/admin/player/{user}/details', [PlayerDetailController::class, 'update'])->name('admin.player.details.update');
+    Route::delete('/admin/player/{user}/details', [PlayerDetailController::class, 'destroy'])->name('admin.player.details.destroy');
+});
 require __DIR__.'/auth.php';
