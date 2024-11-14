@@ -9,6 +9,7 @@ use App\Http\Controllers\CoachController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\PlayerDetailController;
+use App\Http\Controllers\TournamentController;
 
 // Middleware de autenticación
 Route::middleware(['auth'])->group(function () {
@@ -57,8 +58,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
-
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/player/details', [PlayerDetailController::class, 'index'])->name('admin.player.details.index');
     Route::get('/admin/player/details/create', [PlayerDetailController::class, 'create'])->name('admin.player.details.create');
@@ -67,4 +66,15 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::put('/admin/player/{user}/details', [PlayerDetailController::class, 'update'])->name('admin.player.details.update');
     Route::delete('/admin/player/{user}/details', [PlayerDetailController::class, 'destroy'])->name('admin.player.details.destroy');
 });
+
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/admin/tournaments', [TournamentController::class, 'index'])->name('admin.tournaments.index');
+    Route::get('/admin/tournaments/create', [TournamentController::class, 'create'])->name('admin.tournaments.create');
+    Route::post('/admin/tournaments', [TournamentController::class, 'store'])->name('admin.tournaments.store');
+    Route::get('/admin/tournaments/{tournament}/edit', [TournamentController::class, 'edit'])->name('admin.tournaments.edit');
+    Route::put('/admin/tournaments/{tournament}', [TournamentController::class, 'update'])->name('admin.tournaments.update');
+    Route::get('/admin/tournaments/{tournament}', [TournamentController::class, 'show'])->name('admin.tournaments.show');
+});
+Route::delete('/admin/tournaments/{tournament}', [TournamentController::class, 'destroy'])->name('admin.tournaments.destroy');
+
 require __DIR__.'/auth.php';

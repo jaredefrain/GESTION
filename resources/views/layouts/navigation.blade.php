@@ -23,6 +23,9 @@
                         <x-nav-link :href="route('admin.player.details.index', Auth::user())" :active="request()->routeIs('admin.player.details.index')">
                             {{ __('Detalles jugadores') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('admin.tournaments.index')" :active="request()->routeIs('admin.tournaments.index')">
+                            {{ __('Gestionar Torneos') }}
+                        </x-nav-link>
                     @elseif(Auth::user()->role === 'referee')
                         <x-nav-link :href="route('referee.dashboard')" :active="request()->routeIs('referee.dashboard')">
                             {{ __('Dashboard Árbitro') }}
@@ -56,7 +59,9 @@
                         <x-dropdown-link :href="route('profile.edit')">
                             {{ __('Profile') }}
                         </x-dropdown-link>
-
+                        <x-dropdown-link :href="route('admin.tournaments.index')">
+                            {{ __('Manage Tournaments') }}
+                        </x-dropdown-link>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <x-dropdown-link :href="route('logout')"
@@ -95,6 +100,9 @@
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('admin.player.details.index', Auth::user())" :active="request()->routeIs('admin.player.details.index')">
                     {{ __('Detalles jugadores') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.tournaments.index')" :active="request()->routeIs('admin.tournaments.index')">
+                    {{ __('Gestionar Torneos') }}
                 </x-responsive-nav-link>
             @elseif(Auth::user()->role === 'referee')
                 <x-responsive-nav-link :href="route('referee.dashboard')" :active="request()->routeIs('referee.dashboard')">
