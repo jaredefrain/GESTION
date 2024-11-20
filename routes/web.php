@@ -10,6 +10,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\PlayerDetailController;
 use App\Http\Controllers\TournamentController;
+use App\Http\Controllers\GameController;
 
 // Middleware de autenticación
 Route::middleware(['auth'])->group(function () {
@@ -74,7 +75,18 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/tournaments/{tournament}/edit', [TournamentController::class, 'edit'])->name('admin.tournaments.edit');
     Route::put('/admin/tournaments/{tournament}', [TournamentController::class, 'update'])->name('admin.tournaments.update');
     Route::get('/admin/tournaments/{tournament}', [TournamentController::class, 'show'])->name('admin.tournaments.show');
+    Route::delete('/admin/tournaments/{tournament}', [TournamentController::class, 'destroy'])->name('admin.tournaments.destroy');
 });
-Route::delete('/admin/tournaments/{tournament}', [TournamentController::class, 'destroy'])->name('admin.tournaments.destroy');
+
+// Rutas para la gestión de vistas de juegos por el admin
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/admin/games', [GameController::class, 'index'])->name('admin.games.index'); // Vista para listar todos los juegos
+    Route::get('/admin/games/create', [GameController::class, 'create'])->name('admin.games.create'); // Vista para crear un nuevo juego
+    Route::post('/admin/games', [GameController::class, 'store'])->name('admin.games.store'); // Acción para almacenar un nuevo juego
+    Route::get('/admin/games/{game}/edit', [GameController::class, 'edit'])->name('admin.games.edit'); // Vista para editar un juego existente
+    Route::put('/admin/games/{game}', [GameController::class, 'update'])->name('admin.games.update'); // Acción para actualizar un juego existente
+    Route::delete('/admin/games/{game}', [GameController::class, 'destroy'])->name('admin.games.destroy'); // Acción para eliminar un juego existente
+    Route::get('admin/games/events', [GameController::class, 'events'])->name('admin.games.events');
+});
 
 require __DIR__.'/auth.php';

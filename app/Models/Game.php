@@ -13,6 +13,8 @@ class Game extends Model
         'tournament_id', 'team1_id', 'team2_id', 'referee_id', 'match_date', 'location'
     ];
 
+    protected $dates = ['match_date'];
+
     public function tournament()
     {
         return $this->belongsTo(Tournament::class);
