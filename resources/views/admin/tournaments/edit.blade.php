@@ -1,4 +1,3 @@
-
 @extends('layouts.app')
 
 @section('content')
@@ -20,24 +19,34 @@
             </select>
         </div>
         <div class="form-group">
-            <label for="number_of_teams">Numero de equipos</label>
+            <label for="number_of_teams">Número de Equipos</label>
             <input type="number" name="number_of_teams" id="number_of_teams" class="form-control" value="{{ $tournament->number_of_teams }}" required>
         </div>
         <div class="form-group">
             <label for="teams">Equipos</label>
-            <select name="teams[]" id="teams" class="form-control" multiple required>
+            <div id="teams" class="form-control" style="height: auto;">
                 @foreach($teams as $team)
-                    <option value="{{ $team->id }}" {{ in_array($team->id, $tournament->teams->pluck('id')->toArray()) ? 'selected' : '' }}>{{ $team->name }}</option>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="teams[]" value="{{ $team->id }}" id="team{{ $team->id }}" {{ in_array($team->id, $tournament->teams->pluck('id')->toArray()) ? 'checked' : '' }}>
+                        <label class="form-check-label" for="team{{ $team->id }}">
+                            {{ $team->name }}
+                        </label>
+                    </div>
                 @endforeach
-            </select>
+            </div>
         </div>
         <div class="form-group">
-            <label for="referees">Arbitros</label>
-            <select name="referees[]" id="referees" class="form-control" multiple required>
+            <label for="referees">Árbitros</label>
+            <div id="referees" class="form-control" style="height: auto;">
                 @foreach($referees as $referee)
-                    <option value="{{ $referee->id }}" {{ in_array($referee->id, $tournament->referees->pluck('id')->toArray()) ? 'selected' : '' }}>{{ $referee->name }}</option>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="referees[]" value="{{ $referee->id }}" id="referee{{ $referee->id }}" {{ in_array($referee->id, $tournament->referees->pluck('id')->toArray()) ? 'checked' : '' }}>
+                        <label class="form-check-label" for="referee{{ $referee->id }}">
+                            {{ $referee->name }}
+                        </label>
+                    </div>
                 @endforeach
-            </select>
+            </div>
         </div>
         <button type="submit" class="btn btn-primary">Actualizar Torneo</button>
     </form>

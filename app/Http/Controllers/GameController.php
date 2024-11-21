@@ -7,15 +7,20 @@ use App\Models\Team;
 use App\Models\User;
 use App\Models\Tournament;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class GameController extends Controller
 {
     public function index()
     {
-        $games = Game::with(['team1', 'team2', 'referee', 'tournament'])->get();
-        return view('admin.games.index', compact('games'));
-    }
+        $games = Game::all()->map(function ($game) {
+            $game->match_date = Carbon::parse($game->match_date);
+            return $game;
+        });
 
+        $tournaments = Tournament::all();
+        return view('admin.games.index', compact('games', 'tournaments'));
+    }
     public function create()
     {
         $teams = Team::all();
@@ -68,6 +73,6 @@ class GameController extends Controller
         $game->delete();
         return redirect()->route('admin.games.index')->with('success', 'Game deleted successfully.');
     }
-    
-    
+
+
 }
