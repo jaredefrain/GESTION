@@ -17,4 +17,9 @@ class PlayerDetail extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function playerDetail()
+{
+    return $this->hasOne(PlayerDetail::class);
+}
 }

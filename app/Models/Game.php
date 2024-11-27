@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Carbon\Carbon;
 class Game extends Model
 {
     use HasFactory;
@@ -33,5 +33,10 @@ class Game extends Model
     public function referee()
     {
         return $this->belongsTo(User::class, 'referee_id');
+    }
+
+    public function getMatchDateAttribute($value)
+    {
+        return Carbon::parse($value);
     }
 }

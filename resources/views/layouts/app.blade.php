@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link href="https://uicdn.toast.com/tui.calendar/latest/tui-calendar.min.css" rel="stylesheet" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Hospital Management')</title>
@@ -44,6 +45,35 @@
             text-decoration: none;
             cursor: pointer;
         }
+        .tooltip {
+            position: absolute;
+            z-index: 1070;
+            display: block;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 0.875rem;
+            font-weight: 400;
+            line-height: 1.5;
+            text-align: left;
+            text-align: start;
+            text-decoration: none;
+            text-shadow: none;
+            text-transform: none;
+            letter-spacing: normal;
+            word-break: normal;
+            word-spacing: normal;
+            white-space: normal;
+            line-break: auto;
+            font-style: normal;
+            font-variant: normal;
+            font-size-adjust: none;
+            font-stretch: normal;
+            opacity: 0;
+            filter: alpha(opacity=0);
+        }
+        .tooltip.show {
+            opacity: 0.9;
+            filter: alpha(opacity=90);
+        }
     </style>
 
 </head>
@@ -52,10 +82,14 @@
     <!-- Barra de Navegación -->
     @include('layouts.navigation')
 
-    <!-- Contenido Principal -->
-    <div class="container mx-auto mt-10">
+
+    <div id="app">
         @yield('content')
     </div>
+    <script src="https://uicdn.toast.com/tui.calendar/latest/tui-calendar.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tooltip.js@1.3.3/dist/umd/tooltip.min.js"></script>
+    @yield('scripts')
 
 </body>
 </html>

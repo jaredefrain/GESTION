@@ -1,4 +1,3 @@
-
 @extends('layouts.app')
 
 @section('content')
@@ -24,5 +23,6 @@
         @method('DELETE')
         <button type="submit" class="btn btn-danger">Delete</button>
     </form>
+    <a href="{{ route('admin.tournaments.generateFixtures', $tournament) }}" class="btn btn-primary">Generate Fixtures</a>
 </div>
 @endsection

@@ -76,6 +76,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::put('/admin/tournaments/{tournament}', [TournamentController::class, 'update'])->name('admin.tournaments.update');
     Route::get('/admin/tournaments/{tournament}', [TournamentController::class, 'show'])->name('admin.tournaments.show');
     Route::delete('/admin/tournaments/{tournament}', [TournamentController::class, 'destroy'])->name('admin.tournaments.destroy');
+    Route::get('/admin/tournaments/{tournament}/generateFixtures', [TournamentController::class, 'generateFixtures'])->name('admin.tournaments.generateFixtures');
 });
 
 // Rutas para la gestión de vistas de juegos por el admin

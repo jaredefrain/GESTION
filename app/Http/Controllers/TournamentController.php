@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Tournament;
 use App\Models\Team;
 use App\Models\User;
+use App\Models\Game;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class TournamentController extends Controller
@@ -75,4 +77,35 @@ class TournamentController extends Controller
         $tournament->delete();
         return redirect()->route('admin.tournaments.index')->with('success', 'Tournament deleted successfully.');
     }
+    public function generateFixtures(Tournament $tournament)
+{
+    $teams = $tournament->teams;
+    $numberOfTeams = $teams->count();
+    $fixtures = [];
+
+    if ($tournament->type == 'liga') {
+        // Generate round-robin fixtures
+        for ($i = 0; $i < $numberOfTeams - 1; $i++) {
+            for ($j = $i + 1; $j < $numberOfTeams; $j++) {
+                $fixtures[] = [
+                    'team1_id' => $teams[$i]->id,
+                    'team2_id' => $teams[$j]->id,
+                    'tournament_id' => $tournament->id,
+                    'match_date' => Carbon::now()->addDays(rand(1, 30)), // Example date
+                    'location' => 'Stadium ' . rand(1, 5), // Example location
+                    'referee_id' => $tournament->referees->random()->id,
+                ];
+            }
+        }
+    }
+
+    // Save fixtures to the database
+    foreach ($fixtures as $fixture) {
+        Game::create($fixture);
+    }
+
+    $fixtures = Game::where('tournament_id', $tournament->id)->get();
+
+    return view('admin.tournaments.fixtures', compact('tournament', 'fixtures'))->with('success', 'Fixtures generated successfully.');
+}
 }
