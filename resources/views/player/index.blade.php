@@ -32,7 +32,7 @@
                 <button id="toggleTableBtn" class="bg-blue-500 text-white px-4 py-2 rounded">Ocultar/Mostrar Tabla</button>
                 <input type="text" id="filterInput" placeholder="Filtrar por equipo" class="border p-2 rounded">
             </div>
-           
+
             <div id="gamesTableContainer">
                 <table class="min-w-full bg-white">
                     <thead class="bg-gray-800 text-white">

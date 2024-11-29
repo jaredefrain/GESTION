@@ -38,9 +38,12 @@
                     <td>{{ $game->team1->name }}</td>
                     <td>{{ $game->team2->name }}</td>
                     <td>{{ $game->referee->name }}</td>
-                    <td>{{ $game->match_date }}</td>
+                    <td>{{ $game->match_date->format('d/m/Y H:i') }}</td>
                     <td>{{ $game->location }}</td>
                     <td>
+                        @if($game->match_date->isPast())
+                            <a href="{{ route('admin.games.manage', $game->id) }}" class="btn btn-secondary">Gestionar Partido</a>
+                        @endif
                         <a href="{{ route('admin.games.edit', $game) }}" class="btn btn-warning">Editar</a>
                         <form action="{{ route('admin.games.destroy', $game) }}" method="POST" style="display:inline;">
                             @csrf

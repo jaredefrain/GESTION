@@ -70,7 +70,7 @@
         <!-- Footer -->
         <footer class="bg-blue-900 text-white py-6">
             <div class="container mx-auto text-center">
-                <p>&copy; 2024 Sistema de Gestión Hospitalaria. Todos los derechos reservados.</p>
+                <p>&copy; 2024 Sistema de control deportivo.</p>
             </div>
         </footer>
 

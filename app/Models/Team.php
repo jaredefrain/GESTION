@@ -16,4 +16,10 @@ class Team extends Model
         return $this->belongsToMany(User::class, 'team_user', 'team_id', 'user_id')
                     ->where('role', User::ROLE_PLAYER);
     }
+
+    public function coaches()
+    {
+        return $this->belongsToMany(User::class, 'team_user', 'team_id', 'user_id')
+                    ->where('role', User::ROLE_COACH);
+    }
 }

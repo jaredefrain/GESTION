@@ -88,6 +88,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::put('/admin/games/{game}', [GameController::class, 'update'])->name('admin.games.update'); // Acción para actualizar un juego existente
     Route::delete('/admin/games/{game}', [GameController::class, 'destroy'])->name('admin.games.destroy'); // Acción para eliminar un juego existente
     Route::get('admin/games/events', [GameController::class, 'events'])->name('admin.games.events');
+    Route::get('/admin/games/{game}/manage', [GameController::class, 'manage'])->name('admin.games.manage');
+    Route::post('/admin/games/{game}/statistics', [GameController::class, 'storeStatistics'])->name('admin.games.statistics.store');
 });
 
 require __DIR__.'/auth.php';
