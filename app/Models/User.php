@@ -48,14 +48,18 @@ class User extends Authenticatable
     }
 
     public function playerDetail()
-{
+    {
     return $this->hasOne(PlayerDetail::class);
-}
-public function teams()
-{
-    return $this->belongsToMany(Team::class, 'team_user', 'user_id', 'team_id');
-}
+    }
+    public function teams()
+    {
+        return $this->belongsToMany(Team::class, 'team_user', 'user_id', 'team_id');
+    }
 
+    public function coachedTeams()
+    {
+        return $this->belongsToMany(Team::class, 'team_coach', 'coach_id', 'team_id');
+    }
 
 
 }

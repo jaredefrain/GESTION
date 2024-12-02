@@ -5,145 +5,128 @@
     <div class="bg-white p-8 rounded-lg shadow-lg">
         <h2 class="text-2xl font-bold mb-6 text-gray-800">Dashboard de Entrenador</h2>
 
-        <!-- Información del Equipo -->
-        <div class="mb-6">
-            <h3 class="text-xl font-semibold mb-2">Equipo: {{ $team->name }}</h3>
-            <img src="{{ asset('storage/' . $team->logo) }}" alt="{{ $team->name }}" class="w-24 h-24">
-        </div>
-
-        <!-- Partidos Jugados y Por Jugar -->
-        <div class="mb-6">
-            <h3 class="text-xl font-semibold mb-2">Partidos</h3>
-            <table class="min-w-full bg-white">
-                <thead class="bg-gray-800 text-white">
+        <h3 class="text-xl font-semibold mb-4">Estadísticas de Jugadores</h3>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-200">
+                <thead class="bg-gray-100">
                     <tr>
-                        <th class="py-2 px-4">Fecha</th>
-                        <th class="py-2 px-4">Equipo 1</th>
-                        <th class="py-2 px-4">Equipo 2</th>
-                        <th class="py-2 px-4">Ubicación</th>
+                        <th class="py-2 px-4 border-b">Jugador</th>
+                        <th class="py-2 px-4 border-b">Partidos Jugados</th>
+                        <th class="py-2 px-4 border-b">Goles</th>
+                        <th class="py-2 px-4 border-b">Asistencias</th>
+                        <th class="py-2 px-4 border-b">Tarjetas Amarillas</th>
+                        <th class="py-2 px-4 border-b">Tarjetas Rojas</th>
                     </tr>
                 </thead>
-                <tbody class="text-gray-700">
-                    @foreach($games as $game)
-                    <tr>
-                        <td class="border px-4 py-2">{{ $game->match_date->format('d/m/Y H:i') }}</td>
-                        <td class="border px-4 py-2">{{ $game->team1->name }}</td>
-                        <td class="border px-4 py-2">{{ $game->team2->name }}</td>
-                        <td class="border px-4 py-2">{{ $game->location }}</td>
-                    </tr>
+                <tbody>
+                    @foreach($playerStats as $stat)
+                        <tr class="hover:bg-gray-50">
+                            <td class="border px-4 py-2">{{ $stat->player->name }}</td>
+                            <td class="border px-4 py-2 text-center">{{ $stat->total_games }}</td>
+                            <td class="border px-4 py-2 text-center">{{ $stat->total_goals }}</td>
+                            <td class="border px-4 py-2 text-center">{{ $stat->total_assists }}</td>
+                            <td class="border px-4 py-2 text-center">{{ $stat->total_yellow_cards }}</td>
+                            <td class="border px-4 py-2 text-center">{{ $stat->total_red_cards }}</td>
+                        </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
 
-        <!-- Gráficas de Estadísticas -->
-        <div class="mb-6">
-            <h3 class="text-xl font-semibold mb-2">Estadísticas del Equipo</h3>
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <canvas id="goalsChart"></canvas>
+        <div class="mt-6">
+            <h3 class="text-xl font-semibold mb-4">Mejor Jugador</h3>
+            @if($bestPlayer)
+                <div class="p-4 bg-green-100 rounded-lg">
+                    <p class="text-lg font-medium">{{ $bestPlayer->player->name }}</p>
+                    <p>Goles: {{ $bestPlayer->total_goals }}</p>
+                    <p>Asistencias: {{ $bestPlayer->total_assists }}</p>
+                    <p>Tarjetas Amarillas: {{ $bestPlayer->total_yellow_cards }}</p>
+                    <p>Tarjetas Rojas: {{ $bestPlayer->total_red_cards }}</p>
                 </div>
-                <div>
-                    <canvas id="cardsChart"></canvas>
-                </div>
-            </div>
+            @else
+                <p>No hay datos disponibles.</p>
+            @endif
         </div>
 
-        <!-- Estadísticas de Jugadores -->
-        <div class="mb-6">
-            <h3 class="text-xl font-semibold mb-2">Estadísticas de Jugadores</h3>
-            <table class="min-w-full bg-white">
-                <thead class="bg-gray-800 text-white">
-                    <tr>
-                        <th class="py-2 px-4">Jugador</th>
-                        <th class="py-2 px-4">Goles</th>
-                        <th class="py-2 px-4">Asistencias</th>
-                        <th class="py-2 px-4">Tarjetas Amarillas</th>
-                        <th class="py-2 px-4">Tarjetas Rojas</th>
-                    </tr>
-                </thead>
-                <tbody class="text-gray-700">
+        <div class="mt-6">
+            <h3 class="text-xl font-semibold mb-4">Peor Jugador</h3>
+            @if($worstPlayer)
+                <div class="p-4 bg-red-100 rounded-lg">
+                    <p class="text-lg font-medium">{{ $worstPlayer->player->name }}</p>
+                    <p>Goles: {{ $worstPlayer->total_goals }}</p>
+                    <p>Asistencias: {{ $worstPlayer->total_assists }}</p>
+                    <p>Tarjetas Amarillas: {{ $worstPlayer->total_yellow_cards }}</p>
+                    <p>Tarjetas Rojas: {{ $worstPlayer->total_red_cards }}</p>
+                </div>
+            @else
+                <p>No hay datos disponibles.</p>
+            @endif
+        </div>
+
+        <div class="mt-6">
+            <h3 class="text-xl font-semibold mb-4">Seleccionar Jugador</h3>
+            <form method="GET" action="{{ route('coach.dashboard') }}">
+                <select name="player_id" class="border border-gray-300 rounded p-2">
+                    <option value="">Seleccione un jugador</option>
                     @foreach($players as $player)
-                    <tr>
-                        <td class="border px-4 py-2">{{ $player->name }}</td>
-                        <td class="border px-4 py-2">{{ $player->playerDetail->goals }}</td>
-                        <td class="border px-4 py-2">{{ $player->playerDetail->assists }}</td>
-                        <td class="border px-4 py-2">{{ $player->playerDetail->yellow_cards }}</td>
-                        <td class="border px-4 py-2">{{ $player->playerDetail->red_cards }}</td>
-                    </tr>
+                        <option value="{{ $player->id }}" {{ request('player_id') == $player->id ? 'selected' : '' }}>{{ $player->name }}</option>
                     @endforeach
-                </tbody>
-            </table>
+                </select>
+                <button type="submit" class="ml-2 bg-blue-500 text-white px-4 py-2 rounded">Ver Rendimiento</button>
+            </form>
         </div>
+
+        @if($selectedPlayer && $selectedPlayerStats)
+            <div class="mt-6">
+                <h3 class="text-xl font-semibold mb-4">Rendimiento de {{ $selectedPlayer->name }}</h3>
+                <canvas id="playerPerformanceChart"></canvas>
+            </div>
+        @endif
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Datos para las gráficas
-        const players = @json($players);
-        const goalsData = {
-            labels: players.map(player => player.name),
-            datasets: [{
-                label: 'Goles',
-                data: players.map(player => player.playerDetail.goals),
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
-            }]
-        };
-
-        const cardsData = {
-            labels: players.map(player => player.name),
-            datasets: [{
-                label: 'Tarjetas Amarillas',
-                data: players.map(player => player.playerDetail.yellow_cards),
-                backgroundColor: 'rgba(255, 206, 86, 0.2)',
-                borderColor: 'rgba(255, 206, 86, 1)',
-                borderWidth: 1
-            }, {
-                label: 'Tarjetas Rojas',
-                data: players.map(player => player.playerDetail.red_cards),
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 1
-            }]
-        };
-
-        // Crear la gráfica de goles
-        const goalsChartCtx = document.getElementById('goalsChart').getContext('2d');
-        new Chart(goalsChartCtx, {
+@if($selectedPlayer && $selectedPlayerStats)
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var ctx = document.getElementById('playerPerformanceChart').getContext('2d');
+        var chart = new Chart(ctx, {
             type: 'bar',
-            data: goalsData,
+            data: {
+                labels: ['Partidos Jugados', 'Goles', 'Asistencias', 'Tarjetas Amarillas', 'Tarjetas Rojas'],
+                datasets: [{
+                    label: 'Estadísticas',
+                    data: [
+                        {{ $selectedPlayerStats->total_games }},
+                        {{ $selectedPlayerStats->total_goals }},
+                        {{ $selectedPlayerStats->total_assists }},
+                        {{ $selectedPlayerStats->total_yellow_cards }},
+                        {{ $selectedPlayerStats->total_red_cards }}
+                    ],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 99, 132, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(255, 99, 132, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
             options: {
                 scales: {
                     y: {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 1
-                        }
+                        beginAtZero: true
                     }
                 }
             }
         });
-
-        // Crear la gráfica de tarjetas
-        const cardsChartCtx = document.getElementById('cardsChart').getContext('2d');
-        new Chart(cardsChartCtx, {
-            type: 'bar',
-            data: cardsData,
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 1
-                        }
-                    }
-                }
-            }
-        });
-    });
-</script>
+    </script>
+@endif
 @endsection

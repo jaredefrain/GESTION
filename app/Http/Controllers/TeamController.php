@@ -11,8 +11,9 @@ class TeamController extends Controller
 {
     public function index()
     {
-        $teams = Team::all();
-        return view('admin.teams.index', compact('teams'));
+        $teams = Team::with('players', 'coaches')->get();
+        $coaches = User::where('role', User::ROLE_COACH)->get();
+        return view('admin.teams.index', compact('teams', 'coaches'));
     }
 
     public function create()
@@ -101,5 +102,17 @@ class TeamController extends Controller
         $team->players()->detach($player->id);
 
         return redirect()->back()->with('success', 'Player removed from team successfully.');
+    }
+
+    public function assignCoach(Request $request, Team $team)
+    {
+        $request->validate([
+            'coaches' => 'required|array',
+            'coaches.*' => 'exists:users,id',
+        ]);
+
+        $team->coaches()->sync($request->coaches);
+
+        return redirect()->route('teams.index')->with('success', 'Entrenadores asignados exitosamente.');
     }
 }

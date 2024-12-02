@@ -90,6 +90,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('admin/games/events', [GameController::class, 'events'])->name('admin.games.events');
     Route::get('/admin/games/{game}/manage', [GameController::class, 'manage'])->name('admin.games.manage');
     Route::post('/admin/games/{game}/statistics', [GameController::class, 'storeStatistics'])->name('admin.games.statistics.store');
+    Route::post('teams/{team}/assign-coach', [TeamController::class, 'assignCoach'])->name('teams.assignCoach');
 });
 
 require __DIR__.'/auth.php';
