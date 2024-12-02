@@ -11,6 +11,7 @@ use App\Http\Controllers\TeamController;
 use App\Http\Controllers\PlayerDetailController;
 use App\Http\Controllers\TournamentController;
 use App\Http\Controllers\GameController;
+use App\Http\Controllers\LeagueController;
 
 // Middleware de autenticación
 Route::middleware(['auth'])->group(function () {
@@ -94,3 +95,5 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+Route::get('/league/standings', [LeagueController::class, 'standings'])->name('league.standings');

@@ -29,17 +29,29 @@
                         <x-nav-link :href="route('admin.games.index')" :active="request()->routeIs('admin.games.index')">
                             {{ __('Planificar Partidos') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('league.standings')" :active="request()->routeIs('league.standings')">
+                            {{ __('Tabla Posiciones') }}
+                        </x-nav-link>
                     @elseif(Auth::user()->role === 'referee')
                         <x-nav-link :href="route('referee.dashboard')" :active="request()->routeIs('referee.dashboard')">
                             {{ __('Dashboard Árbitro') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('league.standings')" :active="request()->routeIs('league.standings')">
+                            {{ __('Tabla Posiciones') }}
                         </x-nav-link>
                     @elseif(Auth::user()->role === 'player')
                         <x-nav-link :href="route('player.dashboard')" :active="request()->routeIs('player.dashboard')">
                             {{ __('Dashboard Jugador') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('league.standings')" :active="request()->routeIs('league.standings')">
+                            {{ __('Tabla Posiciones') }}
+                        </x-nav-link>
                     @elseif(Auth::user()->role === 'coach')
                         <x-nav-link :href="route('coach.dashboard')" :active="request()->routeIs('coach.dashboard')">
                             {{ __('Dashboard Entrenador') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('league.standings')" :active="request()->routeIs('league.standings')">
+                            {{ __('Tabla Posiciones') }}
                         </x-nav-link>
                     @endif
                 </div>
@@ -109,17 +121,31 @@
                 <x-responsive-nav-link :href="route('admin.games.index')" :active="request()->routeIs('admin.games.index')">
                     {{ __('Planificar Partidos') }}
                 </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('league.standings')" :active="request()->routeIs('league.standings')">
+                    {{ __('Tabla posiciones') }}
+                </x-responsive-nav-link>
+
+
             @elseif(Auth::user()->role === 'referee')
                 <x-responsive-nav-link :href="route('referee.dashboard')" :active="request()->routeIs('referee.dashboard')">
                     {{ __('Dashboard Árbitro') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('league.standings')" :active="request()->routeIs('league.standings')">
+                    {{ __('Tabla posiciones') }}
                 </x-responsive-nav-link>
             @elseif(Auth::user()->role === 'player')
                 <x-responsive-nav-link :href="route('player.dashboard')" :active="request()->routeIs('player.dashboard')">
                     {{ __('Dashboard Jugador') }}
                 </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('league.standings')" :active="request()->routeIs('league.standings')">
+                    {{ __('Tabla posiciones') }}
+                </x-responsive-nav-link>
             @elseif(Auth::user()->role === 'coach')
                 <x-responsive-nav-link :href="route('coach.dashboard')" :active="request()->routeIs('coach.dashboard')">
                     {{ __('Dashboard Entrenador') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('league.standings')" :active="request()->routeIs('league.standings')">
+                    {{ __('Tabla posiciones') }}
                 </x-responsive-nav-link>
             @endif
         </div>
