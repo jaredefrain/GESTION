@@ -12,6 +12,7 @@ use App\Http\Controllers\PlayerDetailController;
 use App\Http\Controllers\TournamentController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\LeagueController;
+use App\Http\Controllers\StadiumController;
 
 // Middleware de autenticación
 Route::middleware(['auth'])->group(function () {
@@ -92,6 +93,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/games/{game}/manage', [GameController::class, 'manage'])->name('admin.games.manage');
     Route::post('/admin/games/{game}/statistics', [GameController::class, 'storeStatistics'])->name('admin.games.statistics.store');
     Route::post('teams/{team}/assign-coach', [TeamController::class, 'assignCoach'])->name('teams.assignCoach');
+    Route::get('/stadiums', [StadiumController::class, 'index'])->name('stadiums.index');
+    Route::get('/stadiums/create', [StadiumController::class, 'create'])->name('stadiums.create');
+    Route::post('/stadiums', [StadiumController::class, 'store'])->name('stadiums.store');
+    Route::get('/stadiums/{stadium}/edit', [StadiumController::class, 'edit'])->name('stadiums.edit');
+    Route::put('/stadiums/{stadium}', [StadiumController::class, 'update'])->name('stadiums.update');
+    Route::delete('/stadiums/{stadium}', [StadiumController::class, 'destroy'])->name('stadiums.destroy');
 });
 
 require __DIR__.'/auth.php';

@@ -65,8 +65,8 @@
 
         <div class="mt-6">
             <h3 class="text-xl font-semibold mb-4">Seleccionar Jugador</h3>
-            <form method="GET" action="{{ route('coach.dashboard') }}">
-                <select name="player_id" class="border border-gray-300 rounded p-2">
+            <form method="GET" action="{{ route('coach.dashboard') }}" onsubmit="return validateForm()">
+                <select name="player_id" id="player_id" class="border border-gray-300 rounded p-2">
                     <option value="">Seleccione un jugador</option>
                     @foreach($players as $player)
                         <option value="{{ $player->id }}" {{ request('player_id') == $player->id ? 'selected' : '' }}>{{ $player->name }}</option>
@@ -74,6 +74,7 @@
                 </select>
                 <button type="submit" class="ml-2 bg-blue-500 text-white px-4 py-2 rounded">Ver Rendimiento</button>
             </form>
+            <p id="error-message" class="text-red-500 mt-2" style="display: none;">Primero debe seleccionar un jugador.</p>
         </div>
 
         @if($selectedPlayer && $selectedPlayerStats)
@@ -129,4 +130,17 @@
         });
     </script>
 @endif
+
+<script>
+function validateForm() {
+    const playerSelect = document.getElementById('player_id');
+    const errorMessage = document.getElementById('error-message');
+    if (playerSelect.value === '') {
+        errorMessage.style.display = 'block';
+        return false;
+    }
+    errorMessage.style.display = 'none';
+    return true;
+}
+</script>
 @endsection

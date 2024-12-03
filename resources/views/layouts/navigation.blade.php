@@ -32,6 +32,9 @@
                         <x-nav-link :href="route('league.standings')" :active="request()->routeIs('league.standings')">
                             {{ __('Tabla Posiciones') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('stadiums.index')" :active="request()->routeIs('stadiums.index')">
+                            {{ __('Gestionar Estadios') }}
+                        </x-nav-link>
                     @elseif(Auth::user()->role === 'referee')
                         <x-nav-link :href="route('referee.dashboard')" :active="request()->routeIs('referee.dashboard')">
                             {{ __('Dashboard Árbitro') }}
@@ -124,8 +127,9 @@
                 <x-responsive-nav-link :href="route('league.standings')" :active="request()->routeIs('league.standings')">
                     {{ __('Tabla posiciones') }}
                 </x-responsive-nav-link>
-
-
+                <x-responsive-nav-link :href="route('stadiums.index')" :active="request()->routeIs('stadiums.index')">
+                    {{ __('Gestionar Estadios') }}
+                </x-responsive-nav-link>
             @elseif(Auth::user()->role === 'referee')
                 <x-responsive-nav-link :href="route('referee.dashboard')" :active="request()->routeIs('referee.dashboard')">
                     {{ __('Dashboard Árbitro') }}

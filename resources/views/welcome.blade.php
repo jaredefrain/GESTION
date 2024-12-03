@@ -46,26 +46,6 @@
             </div>
         </div>
 
-        <!-- Sección de Características -->
-        <div class="bg-gray-100 py-20">
-            <div class="container mx-auto px-6 lg:px-8">
-                <h2 class="text-3xl font-semibold text-center text-blue-900 mb-12">Nuestras Características</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div class="bg-white p-6 rounded-lg shadow-md">
-                        <h3 class="text-xl font-semibold text-blue-900">Gestión de Pacientes</h3>
-                        <p class="mt-4 text-gray-700">Gestione fácilmente los registros de pacientes y sus historiales médicos.</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-lg shadow-md">
-                        <h3 class="text-xl font-semibold text-blue-900">Programación de Citas</h3>
-                        <p class="mt-4 text-gray-700">Programe y administre citas con facilidad.</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-lg shadow-md">
-                        <h3 class="text-xl font-semibold text-blue-900">Información Médica</h3>
-                        <p class="mt-4 text-gray-700">Mantenga registros detallados de la información médica de los pacientes.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <!-- Footer -->
         <footer class="bg-blue-900 text-white py-6">

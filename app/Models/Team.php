@@ -28,4 +28,9 @@ class Team extends Model
         return $this->hasMany(Team::class);
 
     }
+
+    public function stadium()
+    {
+        return $this->hasOne(Stadium::class);
+    }
 }
