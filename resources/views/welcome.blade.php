@@ -16,9 +16,15 @@
         <style>
             /* Estilos personalizados adicionales */
             .hero-bg {
-                background-image: url('https://www.hospitalbackgroundimage.com'); /* Añade la URL de una imagen de fondo relevante para el hospital */
+                background-image: url('https://www.hospitalbackgroundimage.com'); /* Añade la URL de una imagen de fondo relevante */
                 background-size: cover;
                 background-position: center;
+            }
+
+            #standings-section {
+                margin-top: 0;
+                padding-top: 0;
+                transition: all 0.3s ease-in-out;
             }
         </style>
     </head>
@@ -26,33 +32,94 @@
 
         <!-- Sección Hero -->
         <div class="hero-bg min-h-screen flex items-center justify-center py-20">
-            <div class="bg-white bg-opacity-80 rounded-lg p-10 shadow-lg">
+            <div class="bg-white bg-opacity-80 rounded-lg p-10 shadow-lg text-center">
                 <h1 class="text-4xl font-bold text-blue-900">Bienvenido al Sistema de Gestión Deportivo</h1>
-                <p class="mt-4 text-lg text-gray-700">Gestione los registros de jugadores, partidos y la información manera eficiente.</p>
+                <p class="mt-4 text-lg text-gray-700">Gestione los registros de jugadores, partidos y la información de manera eficiente.</p>
 
                 @if (Route::has('login'))
-                    <div class="mt-8">
+                    <div class="mt-8 flex justify-center space-x-4">
                         @auth
                             <a href="{{ url('/dashboard') }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Dashboard</a>
                         @else
                             <a href="{{ route('login') }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Iniciar sesión</a>
-
                             @if (Route::has('register'))
-                                <a href="{{ route('register') }}" class="ml-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Registrarse</a>
+                                <a href="{{ route('register') }}" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Registrarse</a>
                             @endif
                         @endauth
+                        <button id="toggle-standings" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Ver Tabla de Posiciones</button>
                     </div>
                 @endif
+
+                <!-- Tabla de Posiciones -->
+                <div id="standings-section" class="hidden mt-4">
+                    <h1 class="text-2xl font-bold mb-4 text-gray-800 text-center">Tabla de Posiciones</h1>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white border border-gray-200">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th class="py-2 px-4 border-b">Equipo</th>
+                                    <th class="py-2 px-4 border-b">PTS</th>
+                                    <th class="py-2 px-4 border-b">PJ</th>
+                                    <th class="py-2 px-4 border-b">G</th>
+                                    <th class="py-2 px-4 border-b">P</th>
+                                    <th class="py-2 px-4 border-b">D</th>
+                                    <th class="py-2 px-4 border-b">GF</th>
+                                    <th class="py-2 px-4 border-b">GC</th>
+                                    <th class="py-2 px-4 border-b">DG</th>
+                                </tr>
+                            </thead>
+                            <tbody id="standings-body">
+                                <!-- Los datos de la tabla de posiciones se cargarán aquí -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
 
-
         <!-- Footer -->
-        <footer class="bg-blue-900 text-white py-6">
+        <footer class="bg-blue-900 text-white py-6 mt-10">
             <div class="container mx-auto text-center">
                 <p>&copy; 2024 Sistema de control deportivo.</p>
             </div>
         </footer>
 
+        <script>
+            document.getElementById('toggle-standings').addEventListener('click', function() {
+                const standingsSection = document.getElementById('standings-section');
+                if (standingsSection.classList.contains('hidden')) {
+                    standingsSection.classList.remove('hidden');
+                    this.textContent = 'Ocultar Tabla de Posiciones';
+                    loadStandings();
+                } else {
+                    standingsSection.classList.add('hidden');
+                    this.textContent = 'Ver Tabla de Posiciones';
+                }
+            });
+
+            function loadStandings() {
+                fetch('{{ route('league.standings') }}')
+                    .then(response => response.json())
+                    .then(data => {
+                        const standingsBody = document.getElementById('standings-body');
+                        standingsBody.innerHTML = '';
+                        data.standings.forEach(team => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td class="border px-4 py-2">${team.team_name}</td>
+                                <td class="border px-4 py-2 text-center">${team.PTS}</td>
+                                <td class="border px-4 py-2 text-center">${team.PJ}</td>
+                                <td class="border px-4 py-2 text-center">${team.G}</td>
+                                <td class="border px-4 py-2 text-center">${team.P}</td>
+                                <td class="border px-4 py-2 text-center">${team.D}</td>
+                                <td class="border px-4 py-2 text-center">${team.GF}</td>
+                                <td class="border px-4 py-2 text-center">${team.GC}</td>
+                                <td class="border px-4 py-2 text-center">${team.DG}</td>
+                            `;
+                            standingsBody.appendChild(row);
+                        });
+                    });
+            }
+        </script>
     </body>
 </html>

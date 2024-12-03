@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
@@ -42,9 +41,7 @@ class LeagueController extends Controller
             $PJ = $games->count();
             $PTS = $games->sum('PTS');
             $DG = $GF - $GC;
-                
 
-            // dd($games, $GF, $GC, $G, $P, $D, $PJ, $PTS, $DG);
             return (object) [
                 'team_name' => $team->name,
                 'PTS' => $PTS,
@@ -60,6 +57,6 @@ class LeagueController extends Controller
 
         $standings = $standings->sortByDesc('PTS')->sortByDesc('DG')->sortByDesc('GF');
 
-        return view('league.standings', compact('standings'));
+        return response()->json(['standings' => $standings]);
     }
 }
