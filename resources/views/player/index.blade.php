@@ -6,24 +6,30 @@
         <h1 class="text-2xl font-bold mb-4">Bienvenido, {{ Auth::user()->name }}</h1>
         <p class="mb-4">Aquí puedes ver tus detalles, próximos partidos y estadísticas del torneo.</p>
 
-        <!-- Detalles del Jugador -->
-        <div class="mb-6">
-            <h2 class="text-xl font-semibold mb-2">Detalles del Jugador</h2>
-            <div class="grid grid-cols-2 gap-4">
-                <div class="bg-gray-100 p-4 rounded-lg shadow">
-                    <p><strong>Altura:</strong> {{ Auth::user()->playerDetail->height }} cm</p>
-                    <p><strong>Posición:</strong> {{ Auth::user()->playerDetail->position }}</p>
-                </div>
-                <div class="bg-gray-100 p-4 rounded-lg shadow">
-                    <p><strong>Goles:</strong> {{ Auth::user()->playerDetail->goals }}</p>
-                    <p><strong>Asistencias:</strong> {{ Auth::user()->playerDetail->assists }}</p>
-                </div>
-                <div class="bg-gray-100 p-4 rounded-lg shadow">
-                    <p><strong>Tarjetas Amarillas:</strong> {{ Auth::user()->playerDetail->yellow_cards }}</p>
-                    <p><strong>Tarjetas Rojas:</strong> {{ Auth::user()->playerDetail->red_cards }}</p>
-                </div>
+<!-- Detalles del Jugador -->
+<div class="mb-6">
+    <h2 class="text-xl font-semibold mb-2">Detalles del Jugador</h2>
+    <div class="grid grid-cols-2 gap-4">
+        @if(Auth::user()->playerDetail)
+            <div class="bg-gray-100 p-4 rounded-lg shadow">
+                <p><strong>Altura:</strong> {{ Auth::user()->playerDetail->height }} cm</p>
+                <p><strong>Posición:</strong> {{ Auth::user()->playerDetail->position }}</p>
             </div>
-        </div>
+            <div class="bg-gray-100 p-4 rounded-lg shadow">
+                <p><strong>Goles:</strong> {{ Auth::user()->playerDetail->goals }}</p>
+                <p><strong>Asistencias:</strong> {{ Auth::user()->playerDetail->assists }}</p>
+            </div>
+            <div class="bg-gray-100 p-4 rounded-lg shadow">
+                <p><strong>Tarjetas Amarillas:</strong> {{ Auth::user()->playerDetail->yellow_cards }}</p>
+                <p><strong>Tarjetas Rojas:</strong> {{ Auth::user()->playerDetail->red_cards }}</p>
+            </div>
+        @else
+            <div class="bg-gray-100 p-4 rounded-lg shadow">
+                <p>No hay detalles del jugador disponibles.</p>
+            </div>
+        @endif
+    </div>
+</div>
 
         <!-- Próximos Partidos -->
         <div class="mb-6">

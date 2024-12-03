@@ -14,7 +14,7 @@ class PlayerController extends Controller
     public function index()
     {
         $user = Auth::user();
-        
+
         // Obtener los equipos del usuario autenticado
         $teamIds = $user->teams->pluck('id');
 
@@ -23,9 +23,12 @@ class PlayerController extends Controller
             ->orWhereIn('team2_id', $teamIds)
             ->where('match_date', '>', Carbon::now())
             ->get();
-    
-        $tournaments = Tournament::with('teams')->get();
-    
+
+        // Obtener los torneos en los que el usuario tiene equipos
+        $tournaments = Tournament::whereHas('teams', function ($query) use ($teamIds) {
+            $query->whereIn('teams.id', $teamIds);
+        })->with('teams')->get();
+
         return view('player.index', compact('upcomingGames', 'tournaments'));
     }
 }
