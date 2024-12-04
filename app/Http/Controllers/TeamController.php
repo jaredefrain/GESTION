@@ -59,7 +59,9 @@ class TeamController extends Controller
 
     public function edit(Team $team)
     {
-        $players = User::where('role', User::ROLE_PLAYER)->get();
+        $players = User::where('role', User::ROLE_PLAYER)
+        ->whereDoesntHave('teams')
+        ->get();
         return view('admin.teams.edit', compact('team', 'players'));
     }
 
