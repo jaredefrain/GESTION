@@ -9,18 +9,18 @@
                     <h1 class="h3 mb-0">Editar Equipo</h1>
                 </div>
                 <div class="card-body">
-                    <form id="team-form" action="{{ route('teams.update', $team) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('teams.update', $team->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="mb-3">
                             <label for="name" class="form-label">Nombre:</label>
-                            <input type="text" name="name" id="name" value="{{ $team->name }}" class="form-control" required>
+                            <input type="text" name="name" id="name" class="form-control" value="{{ $team->name }}" required>
                         </div>
                         <div class="mb-3">
                             <label for="logo" class="form-label">Logo:</label>
                             <input type="file" name="logo" id="logo" class="form-control">
                             @if ($team->logo)
-                                <img src="{{ Storage::url($team->logo) }}" alt="{{ $team->name }}" class="w-16 h-16 mt-2">
+                                <img src="{{ asset('storage/' . $team->logo) }}" alt="Logo del equipo" class="img-thumbnail mt-2" width="150">
                             @endif
                         </div>
                         <div class="mb-3">
@@ -32,7 +32,7 @@
                             <div id="players-list" class="form-check">
                                 @foreach ($players as $player)
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="players[]" value="{{ $player->id }}" id="player-{{ $player->id }}" {{ in_array($player->id, $team->players->pluck('id')->toArray()) ? 'checked' : '' }}>
+                                        <input class="form-check-input" type="checkbox" name="players[]" value="{{ $player->id }}" id="player-{{ $player->id }}" {{ $team->players->contains($player->id) ? 'checked' : '' }}>
                                         <label class="form-check-label" for="player-{{ $player->id }}">
                                             {{ $player->name }}
                                         </label>
@@ -40,7 +40,7 @@
                                 @endforeach
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">Actualizar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
                     </form>
                 </div>
             </div>
@@ -81,23 +81,6 @@
             } else {
                 playersList.style.display = 'none';
                 toggleIcon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16"><path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8a13.133 13.133 0 0 1-1.66 2.043C11.879 11.332 10.12 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.133 13.133 0 0 1 1.172 8z"/><path d="M8 5a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>';
-            }
-        });
-    });
-</script>
-<script>
-    document.getElementById('team-form').addEventListener('submit', function(event) {
-        event.preventDefault();
-        Swal.fire({
-            title: '¿Estás seguro?',           
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Sí, actualizarlo!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                this.submit();
             }
         });
     });

@@ -59,9 +59,17 @@ class TeamController extends Controller
 
     public function edit(Team $team)
     {
-        $players = User::where('role', User::ROLE_PLAYER)
-        ->whereDoesntHave('teams')
-        ->get();
+        // Filtrar jugadores que no tienen equipo y que tienen el rol de jugador
+        $availablePlayers = User::where('role', User::ROLE_PLAYER)
+                                ->whereDoesntHave('teams')
+                                ->get();
+
+        // Obtener los jugadores que ya están en el equipo
+        $teamPlayers = $team->players;
+
+        // Combinar ambos conjuntos de jugadores
+        $players = $availablePlayers->merge($teamPlayers);
+
         return view('admin.teams.edit', compact('team', 'players'));
     }
 
@@ -90,7 +98,7 @@ class TeamController extends Controller
             $team->players()->sync($request->players);
         }
 
-        return redirect()->route('teams.index')->with('success', 'Team updated successfully.');
+        return redirect()->route('teams.index')->with('success', 'Equipo actualizado exitosamente.');
     }
 
     public function destroy(Team $team)
@@ -100,14 +108,14 @@ class TeamController extends Controller
         }
         $team->delete();
 
-        return redirect()->route('teams.index')->with('success', 'Team deleted successfully.');
+        return redirect()->route('teams.index')->with('success', 'Equipo eliminado exitosamente.');
     }
 
     public function removePlayer(Team $team, User $player)
     {
         $team->players()->detach($player->id);
 
-        return redirect()->back()->with('success', 'Player removed from team successfully.');
+        return redirect()->back()->with('success', 'Jugador eliminado del equipo exitosamente.');
     }
 
     public function assignCoach(Request $request, Team $team)
