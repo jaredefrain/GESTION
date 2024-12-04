@@ -18,7 +18,11 @@ class TeamController extends Controller
 
     public function create()
     {
-        $players = User::where('role', User::ROLE_PLAYER)->get();
+        // Filtrar jugadores que no tienen equipo y que tienen el rol de jugador
+        $players = User::where('role', User::ROLE_PLAYER)
+                       ->whereDoesntHave('teams')
+                       ->get();
+
         return view('admin.teams.create', compact('players'));
     }
 
@@ -35,17 +39,17 @@ class TeamController extends Controller
         $team->name = $request->name;
 
         if ($request->hasFile('logo')) {
-            $path = $request->file('logo')->store('logos', 'public');
-            $team->logo = $path;
+            $logoPath = $request->file('logo')->store('logos', 'public');
+            $team->logo = $logoPath;
         }
 
         $team->save();
 
         if ($request->has('players')) {
-            $team->players()->sync($request->players);
+            $team->players()->attach($request->players);
         }
 
-        return redirect()->route('teams.index')->with('success', 'Team created successfully.');
+        return redirect()->route('teams.index')->with('success', 'Equipo creado exitosamente.');
     }
 
     public function show(Team $team)

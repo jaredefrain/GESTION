@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Tournament;
 
 class Team extends Model
 {
@@ -33,4 +34,10 @@ class Team extends Model
     {
         return $this->hasOne(Stadium::class);
     }
+
+    public function tournaments()
+    {
+        return $this->belongsToMany(Tournament::class, 'tournament_team');
+    }
+
 }

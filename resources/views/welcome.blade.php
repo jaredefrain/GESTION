@@ -8,7 +8,7 @@
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet">
 
         <!-- Styles -->
         <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -52,6 +52,12 @@
 
                 <!-- Tabla de Posiciones -->
                 <div id="standings-section" class="hidden mt-4">
+                    <select id="tournament-select" class="bg-gray-200 text-gray-700 px-4 py-2 rounded mb-4">
+                        <option value="">Seleccione un Torneo</option>
+                        @foreach($tournaments as $tournament)
+                            <option value="{{ $tournament->id }}">{{ $tournament->name }}</option>
+                        @endforeach
+                    </select>
                     <h1 class="text-2xl font-bold mb-4 text-gray-800 text-center">Tabla de Posiciones</h1>
                     <div class="overflow-x-auto">
                         <table class="min-w-full bg-white border border-gray-200">
@@ -90,39 +96,48 @@
                 if (standingsSection.classList.contains('hidden')) {
                     standingsSection.classList.remove('hidden');
                     this.textContent = 'Ocultar Tabla de Posiciones';
-                    loadStandings();
+                    const tournamentSelect = document.getElementById('tournament-select');
+                    const tournamentId = tournamentSelect.value;
+                    if (tournamentId) {
+                        loadStandings(tournamentId);
+                    }
                 } else {
                     standingsSection.classList.add('hidden');
                     this.textContent = 'Ver Tabla de Posiciones';
                 }
             });
 
-            function loadStandings() {
-                fetch('{{ route('league.standings') }}')
+            document.getElementById('tournament-select').addEventListener('change', function() {
+                const tournamentId = this.value;
+                if (tournamentId) {
+                    loadStandings(tournamentId);
+                }
+            });
+
+            function loadStandings(tournamentId) {
+                fetch(`/league/standings/${tournamentId}`)
                     .then(response => response.json())
                     .then(data => {
                         console.log(data); // Añade esta línea para verificar la respuesta de la API
                         const standingsBody = document.getElementById('standings-body');
                         standingsBody.innerHTML = '';
-                        if (Array.isArray(data.standings)) {
-                            data.standings.forEach(team => {
-                                const row = document.createElement('tr');
-                                row.innerHTML = `
-                                    <td class="border px-4 py-2">${team.team_name}</td>
-                                    <td class="border px-4 py-2 text-center">${team.PTS}</td>
-                                    <td class="border px-4 py-2 text-center">${team.PJ}</td>
-                                    <td class="border px-4 py-2 text-center">${team.G}</td>
-                                    <td class="border px-4 py-2 text-center">${team.P}</td>
-                                    <td class="border px-4 py-2 text-center">${team.D}</td>
-                                    <td class="border px-4 py-2 text-center">${team.GF}</td>
-                                    <td class="border px-4 py-2 text-center">${team.GC}</td>
-                                    <td class="border px-4 py-2 text-center">${team.DG}</td>
-                                `;
-                                standingsBody.appendChild(row);
-                            });
-                        } else {
-                            console.error('La respuesta de la API no es un array:', data.standings);
-                        }
+                        const standingsArray = Array.isArray(data.standings) ? data.standings : Object.values(data.standings);
+                        standingsArray.sort((a, b) => b.PTS - a.PTS); // Ordenar por PTS de mayor a menor
+                        standingsArray.forEach(team => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td class="border px-4 py-2">${team.team_name}</td>
+                                <td class="border px-4 py-2 text-center">${team.PTS}</td>
+                                <td class="border px-4 py-2 text-center">${team.PJ}</td>
+                                <td class="border px-4 py-2 text-center">${team.G}</td>
+                                <td class="border px-4 py-2 text-center">${team.P}</td>
+                                <td class="border px-4 py-2 text-center">${team.D}</td>
+                                <td class="border px-4 py-2 text-center">${team.GF}</td>
+                                <td class="border px-4 py-2 text-center">${team.GC}</td>
+                                <td class="border px-4 py-2 text-center">${team.DG}</td>
+                            `;
+                            standingsBody.appendChild(row);
+                        });
                     })
                     .catch(error => console.error('Error al cargar los datos de la tabla de posiciones:', error));
             }

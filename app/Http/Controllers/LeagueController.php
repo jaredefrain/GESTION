@@ -3,22 +3,27 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
+use App\Models\Tournament;
+use App\Models\Team;
 
 class LeagueController extends Controller
 {
-    public function standings()
+    public function standings($tournamentId)
     {
-        $teams = DB::table('teams')->get();
+        $tournament = Tournament::findOrFail($tournamentId);
+        $teams = $tournament->teams;
 
-        $standings = $teams->map(function ($team) {
+        $standings = $teams->map(function ($team) use ($tournamentId) {
             $games = DB::table('games')
-                ->leftJoin('game_statistics as gs1', function ($join) use ($team) {
+                ->leftJoin('game_statistics as gs1', function ($join) use ($team, $tournamentId) {
                     $join->on('games.id', '=', 'gs1.game_id')
-                         ->where('gs1.team_id', '=', $team->id);
+                         ->where('gs1.team_id', '=', $team->id)
+                         ->where('games.tournament_id', '=', $tournamentId);
                 })
-                ->leftJoin('game_statistics as gs2', function ($join) use ($team) {
+                ->leftJoin('game_statistics as gs2', function ($join) use ($team, $tournamentId) {
                     $join->on('games.id', '=', 'gs2.game_id')
-                         ->where('gs2.team_id', '!=', $team->id);
+                         ->where('gs2.team_id', '!=', $team->id)
+                         ->where('games.tournament_id', '=', $tournamentId);
                 })
                 ->select(
                     'games.id',
@@ -58,5 +63,11 @@ class LeagueController extends Controller
         $standings = $standings->sortByDesc('PTS')->sortByDesc('DG')->sortByDesc('GF');
 
         return response()->json(['standings' => $standings]);
+    }
+
+    public function index()
+    {
+        $tournaments = Tournament::all();
+        return view('welcome', compact('tournaments'));
     }
 }

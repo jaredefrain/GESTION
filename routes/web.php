@@ -101,6 +101,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::delete('/stadiums/{stadium}', [StadiumController::class, 'destroy'])->name('stadiums.destroy');
 });
 
+Route::get('/league/standings/{tournamentId}', [LeagueController::class, 'standings'])->name('league.standings');
+Route::get('/', [LeagueController::class, 'index'])->name('welcome');
+
 require __DIR__.'/auth.php';
 
 Route::get('/league/standings', [LeagueController::class, 'standings'])->name('league.standings');
