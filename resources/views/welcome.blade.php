@@ -101,24 +101,30 @@
                 fetch('{{ route('league.standings') }}')
                     .then(response => response.json())
                     .then(data => {
+                        console.log(data); // Añade esta línea para verificar la respuesta de la API
                         const standingsBody = document.getElementById('standings-body');
                         standingsBody.innerHTML = '';
-                        data.standings.forEach(team => {
-                            const row = document.createElement('tr');
-                            row.innerHTML = `
-                                <td class="border px-4 py-2">${team.team_name}</td>
-                                <td class="border px-4 py-2 text-center">${team.PTS}</td>
-                                <td class="border px-4 py-2 text-center">${team.PJ}</td>
-                                <td class="border px-4 py-2 text-center">${team.G}</td>
-                                <td class="border px-4 py-2 text-center">${team.P}</td>
-                                <td class="border px-4 py-2 text-center">${team.D}</td>
-                                <td class="border px-4 py-2 text-center">${team.GF}</td>
-                                <td class="border px-4 py-2 text-center">${team.GC}</td>
-                                <td class="border px-4 py-2 text-center">${team.DG}</td>
-                            `;
-                            standingsBody.appendChild(row);
-                        });
-                    });
+                        if (Array.isArray(data.standings)) {
+                            data.standings.forEach(team => {
+                                const row = document.createElement('tr');
+                                row.innerHTML = `
+                                    <td class="border px-4 py-2">${team.team_name}</td>
+                                    <td class="border px-4 py-2 text-center">${team.PTS}</td>
+                                    <td class="border px-4 py-2 text-center">${team.PJ}</td>
+                                    <td class="border px-4 py-2 text-center">${team.G}</td>
+                                    <td class="border px-4 py-2 text-center">${team.P}</td>
+                                    <td class="border px-4 py-2 text-center">${team.D}</td>
+                                    <td class="border px-4 py-2 text-center">${team.GF}</td>
+                                    <td class="border px-4 py-2 text-center">${team.GC}</td>
+                                    <td class="border px-4 py-2 text-center">${team.DG}</td>
+                                `;
+                                standingsBody.appendChild(row);
+                            });
+                        } else {
+                            console.error('La respuesta de la API no es un array:', data.standings);
+                        }
+                    })
+                    .catch(error => console.error('Error al cargar los datos de la tabla de posiciones:', error));
             }
         </script>
     </body>
